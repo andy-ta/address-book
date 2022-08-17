@@ -1,46 +1,92 @@
-# Getting Started with Create React App
+# Address Book
+Andy Ta
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Requirements
 
-## Available Scripts
+- Node.js
 
-In the project directory, you can run:
+## Local Set-Up
 
-### `npm start`
+1. `npm install`
+2. `npm start`
 
-Runs the app in the development mode.\
+Runs the app in the development mode.  
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Run Tests
 
-### `npm test`
+```
+npm test
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Launches the test runner in the interactive watch mode.
 
-### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Build
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```
+npm run build
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Builds the app for production to the `build` folder.
 
-### `npm run eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## Deployment
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Once the app is built, the static assets can be served via a static asset hosting platform such as Netlify.  
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+It is currently exists at [https://stalwart-elf-79d3fb.netlify.app/](https://stalwart-elf-79d3fb.netlify.app/)
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+An alternative would be to serve the files via a Docker container (nginx for example).
+This container can be deployed anywhere (example: Cloud platform). 
 
-## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Summary
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Your overall approach
+I listed the desired features and examined what the API offered.
+
+From these requirements I imagined the "pages" the application: a list of contact and a detail view.
+
+From the API's offering I could determine the fields I would have to show.
+
+Onto development, I started with creating the project using create-react-app, and adding all needing dependencies.
+
+Created a skeleton application with navbar and routing set-up.
+
+Tackled the first feature of listing contacts by setting-up the REST call and loading the results in view.
+
+Implemented sorting the contact list.
+
+Implemented search filtering.
+
+Set-up the routing for the details page and displayed details of the selected contact using the contact's state.
+
+Added some basic happy-path tests for the main features.
+
+Published to GitHub and deployed to Netlify.
+
+### What features you implemented
+- List contacts
+- View contacts details
+- Filter contact list
+- Sort contact list
+
+### Given more time, what else would you have liked to complete and how long it would have taken you?
+- Star a contact: they will always be listed at the top. ~2-3 hours
+- Autocomplete for search filtering + ability to go to details from there. ~2 hours.
+- i18n. ~3-4 hours.
+- Light/Dark theme. 1 hour.
+- Sorting other fields. ~2 hours.
+- Display more fields. 1 hour.
+- Dynamically seed the random api (hardcoded to 'nuvalence' at the moment, could be passed via url param). 1 hour.
+
+### Given more time, what else would you have done to make the project more robust?
+- Issues tracking the features being written
+- Display a loading spinner during a REST call
+- Error handling and displaying a message during a REST call failure.
+- Create smaller components
+- Add more tests (not just happy-path)
+- Add different types of tests (unit, e2e)
+- Set-up store
+- Pagination/Infinite scrolling of the contacts
