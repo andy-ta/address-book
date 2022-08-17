@@ -50,7 +50,7 @@ function App () {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="sticky">
         <Toolbar>
-          <Contacts sx={{ 'margin-right': '10px' }} />
+          <Contacts sx={{ marginRight: '10px' }} />
           <Typography
             variant="h5"
             noWrap
@@ -58,7 +58,7 @@ function App () {
             href="/"
             sx={{
               display: { xs: 'none', sm: 'block' },
-              'text-decoration': 'inherit',
+              textDecoration: 'inherit',
               color: 'inherit'
             }}
           >
@@ -70,6 +70,7 @@ function App () {
             </SearchIconWrapper>
             <StyledInputBase
               placeholder="Search"
+              id="search"
               inputProps={{ 'aria-label': 'search' }}
             />
           </Search>

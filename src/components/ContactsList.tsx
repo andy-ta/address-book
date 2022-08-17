@@ -13,6 +13,7 @@ import {
 } from '@mui/material'
 import ContactService from '../services/ContactService'
 import { Contact } from '../models/Contact'
+import { concatMap, debounceTime, fromEvent, map, Subscription } from 'rxjs'
 
 type Order = 'asc' | 'desc'
 
@@ -30,27 +31,45 @@ const columns: readonly Column[] = [
 ]
 
 export default function ContactsList () {
+  let search$: Subscription
+
   const [contacts, setContacts] = useState<Contact[]>([])
-  const [sortOrder, setSortOrder] = useState<Order>('desc')
+  const [sortOrder, setSortOrder] = useState<Order>('asc')
 
   useEffect(() => {
-    ContactService.getContacts().subscribe(c => {
+    const getContacts$ = ContactService.getContacts().subscribe(c => {
       sortByName(c)
+      getContacts$.unsubscribe()
     })
+
+    search$ = fromEvent(document.querySelector('#search') as HTMLInputElement, 'input')
+      .pipe(
+        map(e => (e.target as HTMLInputElement).value), // Definitely an InputEvent, let's cast it from Event.
+        debounceTime(500),
+        concatMap(ContactService.getContacts)
+      )
+      .subscribe(c => {
+        sortByName(c, sortOrder)
+      })
   }, [])
+
+  useEffect(() => () => search$.unsubscribe(), [])
 
   const getName = (name: Contact['name']) => `${name.first} ${name.last}`
 
   /**
    * Reverses the current sort order and applies it to the provided list of contacts.
    * @param contacts
+   * @param order
    */
-  const sortByName = (contacts: Contact[]) => {
-    const nextOrder = sortOrder === 'asc' ? 'desc' : 'asc'
-    setSortOrder(nextOrder)
+  const sortByName = (contacts: Contact[], order?: Order) => {
+    order = order ?? 'asc'
+    setSortOrder(order)
     const c = contacts.sort((a, b) => {
+      // Sorts the result in reverse alphabetical first.
       const result = getName(a.name) > getName(b.name) ? -1 : 1
-      return nextOrder === 'asc' ? result * -1 : result
+      // If we actually need it as alphabetical, then reverse the result.
+      return order === 'asc' ? result * -1 : result
     })
     setContacts(c)
   }
@@ -71,7 +90,7 @@ export default function ContactsList () {
                     ? <TableSortLabel
                       active
                       direction={sortOrder}
-                      onClick={() => sortByName(contacts)}
+                      onClick={() => sortByName(contacts, sortOrder === 'asc' ? 'desc' : 'asc')}
                     >
                       {column.label}
                     </TableSortLabel>

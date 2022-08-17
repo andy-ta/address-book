@@ -7,10 +7,17 @@ type ContactsResource = { results: Contact[] };
 export default class ContactService {
   static readonly randomApiUrl = 'https://randomuser.me/api'
 
-  static getContacts (): Observable<Contact[]> {
+  static getContacts (term?: string): Observable<Contact[]> {
     return ajax.getJSON<ContactsResource>(`${ContactService.randomApiUrl}/?seed=nuvalence&results=30&inc=name,email,phone,cell,picture,login`)
       .pipe(
-        map(response => response.results)
+        map(response => response.results),
+        map(contacts => {
+          if (term) {
+            return contacts.filter(c =>
+              c.name.first.toLowerCase().includes(term) || c.name.last.toLowerCase().includes(term))
+          }
+          return contacts
+        })
       )
   }
 }
