@@ -1,4 +1,4 @@
-import { ajax } from 'rxjs/internal/ajax/ajax'
+import { ajax } from 'rxjs/ajax'
 import { map, Observable } from 'rxjs'
 import { Contact } from '../models/Contact'
 

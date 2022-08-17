@@ -110,7 +110,7 @@ export default function ContactsList () {
                 }}
                 onClick={() => navigate(`/contact/${row.login.uuid}`, { state: row })}
               >
-                <TableCell component="th" scope="row">
+                <TableCell scope="row">
                   <CardHeader
                     avatar={
                       <Avatar alt={ContactService.getFullName(row.name)} src={row.picture.thumbnail} />
