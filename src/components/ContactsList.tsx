@@ -8,10 +8,13 @@ import {
   TableCell,
   TableContainer,
   TableHead,
-  TableRow
+  TableRow,
+  TableSortLabel
 } from '@mui/material'
 import ContactService from '../services/ContactService'
 import { Contact } from '../models/Contact'
+
+type Order = 'asc' | 'desc'
 
 interface Column {
   id: 'name' | 'email' | 'phone';
@@ -28,14 +31,29 @@ const columns: readonly Column[] = [
 
 export default function ContactsList () {
   const [contacts, setContacts] = useState<Contact[]>([])
+  const [sortOrder, setSortOrder] = useState<Order>('desc')
 
   useEffect(() => {
     ContactService.getContacts().subscribe(c => {
-      setContacts(c)
+      sortByName(c)
     })
   }, [])
 
   const getName = (name: Contact['name']) => `${name.first} ${name.last}`
+
+  /**
+   * Reverses the current sort order and applies it to the provided list of contacts.
+   * @param contacts
+   */
+  const sortByName = (contacts: Contact[]) => {
+    const nextOrder = sortOrder === 'asc' ? 'desc' : 'asc'
+    setSortOrder(nextOrder)
+    const c = contacts.sort((a, b) => {
+      const result = getName(a.name) > getName(b.name) ? -1 : 1
+      return nextOrder === 'asc' ? result * -1 : result
+    })
+    setContacts(c)
+  }
 
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
@@ -49,7 +67,15 @@ export default function ContactsList () {
                   align={column.align}
                   style={{ minWidth: column.minWidth }}
                 >
-                  {column.label}
+                  {column.id === 'name'
+                    ? <TableSortLabel
+                      active
+                      direction={sortOrder}
+                      onClick={() => sortByName(contacts)}
+                    >
+                      {column.label}
+                    </TableSortLabel>
+                    : column.label}
                 </TableCell>
               ))}
             </TableRow>
