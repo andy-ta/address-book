@@ -3,7 +3,7 @@ import './App.css'
 import { alpha, AppBar, Box, InputBase, styled, Toolbar, Typography } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import Contact from './components/Contact'
+import ContactDetail from './components/ContactDetail'
 import ContactsList from './components/ContactsList'
 import { Contacts } from '@mui/icons-material'
 
@@ -48,7 +48,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 function App () {
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+      <AppBar position="sticky">
         <Toolbar>
           <Contacts sx={{ 'margin-right': '10px' }} />
           <Typography
@@ -78,7 +78,7 @@ function App () {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<ContactsList />} />
-          <Route path="contact/:id" element={<Contact />} />
+          <Route path="contact/:id" element={<ContactDetail />} />
           <Route path="*" element={<ContactsList />} />
         </Routes>
       </BrowserRouter>
