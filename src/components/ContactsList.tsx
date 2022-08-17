@@ -14,6 +14,7 @@ import {
 import ContactService from '../services/ContactService'
 import { Contact } from '../models/Contact'
 import { concatMap, debounceTime, fromEvent, map, Subscription } from 'rxjs'
+import { useNavigate } from 'react-router-dom'
 
 type Order = 'asc' | 'desc'
 
@@ -35,6 +36,7 @@ export default function ContactsList () {
 
   const [contacts, setContacts] = useState<Contact[]>([])
   const [sortOrder, setSortOrder] = useState<Order>('asc')
+  const navigate = useNavigate()
 
   useEffect(() => {
     const getContacts$ = ContactService.getContacts().subscribe(c => {
@@ -55,8 +57,6 @@ export default function ContactsList () {
 
   useEffect(() => () => search$.unsubscribe(), [])
 
-  const getName = (name: Contact['name']) => `${name.first} ${name.last}`
-
   /**
    * Reverses the current sort order and applies it to the provided list of contacts.
    * @param contacts
@@ -67,7 +67,7 @@ export default function ContactsList () {
     setSortOrder(order)
     const c = contacts.sort((a, b) => {
       // Sorts the result in reverse alphabetical first.
-      const result = getName(a.name) > getName(b.name) ? -1 : 1
+      const result = ContactService.getFullName(a.name) > ContactService.getFullName(b.name) ? -1 : 1
       // If we actually need it as alphabetical, then reverse the result.
       return order === 'asc' ? result * -1 : result
     })
@@ -108,13 +108,14 @@ export default function ContactsList () {
                   '&:last-child td, &:last-child th': { border: 0 },
                   '&:hover': { cursor: 'pointer' }
                 }}
+                onClick={() => navigate(`/contact/${row.login.uuid}`, { state: row })}
               >
                 <TableCell component="th" scope="row">
                   <CardHeader
                     avatar={
-                      <Avatar alt={getName(row.name)} src={row.picture.thumbnail} />
+                      <Avatar alt={ContactService.getFullName(row.name)} src={row.picture.thumbnail} />
                     }
-                    title={getName(row.name)}
+                    title={ContactService.getFullName(row.name)}
                     sx={{
                       padding: 0
                     }}

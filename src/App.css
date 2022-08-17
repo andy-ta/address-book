@@ -1,0 +1,9 @@
+.iconAlign {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.iconAlign > svg {
+    margin-right: 5px;
+}

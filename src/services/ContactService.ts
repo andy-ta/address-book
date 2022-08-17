@@ -20,4 +20,8 @@ export default class ContactService {
         })
       )
   }
+
+  static getFullName (name: Contact['name']): string {
+    return `${name.first} ${name.last}`
+  }
 }
